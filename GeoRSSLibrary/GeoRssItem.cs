@@ -23,6 +23,8 @@ namespace GeoRSSLibrary
 
         protected string _link;
 
+        protected GeoRssItemType _type;
+
         #endregion
 
         #region Constructors
@@ -33,7 +35,7 @@ namespace GeoRSSLibrary
         public GeoRssItem() { }
 
         public GeoRssItem(string id, DateTime pubDate, string title, string subTitle, 
-            string description, string author, string link)
+            string description, string author, string link,GeoRssItemType type)
         {
             this._id = id;
             this._pubDate = pubDate;
@@ -42,6 +44,7 @@ namespace GeoRSSLibrary
             this._description = description;
             this._author = author;
             this._link = link;
+            this._type = type;
         }
 
         public GeoRssItem(XmlNode itemNode)
@@ -74,10 +77,6 @@ namespace GeoRSSLibrary
             selected = itemNode.SelectSingleNode("author");
             if (selected != null)
                 this._author = selected.InnerText;
-
-            selected = itemNode.SelectSingleNode("link");
-            if (selected != null)
-                this._link = selected.InnerText;
 
             selected = itemNode.SelectSingleNode("link");
             if (selected != null)
@@ -173,7 +172,40 @@ namespace GeoRSSLibrary
             }
         }
 
+        public GeoRssItemType Type
+        {
+            get
+            {
+                return this._type;
+            }
+            set
+            {
+                this._type = value;
+            }
+        }
+
         #endregion
+
+        static public GeoRssItemType GetItemType(XmlNode itemNode)
+        {
+            GeoRssItemType type = GeoRssItemType.Point;
+            XmlNode selected;
+            XmlNamespaceManager xmlNSManager = new XmlNamespaceManager(new System.Xml.NameTable());
+            xmlNSManager.AddNamespace("georss", "http://www.georss.org/georss");
+            selected = itemNode.SelectSingleNode("georss:point", xmlNSManager);
+            if (selected != null)
+                type = GeoRssItemType.Point;
+
+            selected = itemNode.SelectSingleNode("georss:line", xmlNSManager);
+            if (selected != null)
+                type = GeoRssItemType.Line;
+            
+            selected = itemNode.SelectSingleNode("georss:polygon", xmlNSManager);
+            if (selected != null)
+                type = GeoRssItemType.Polygon;
+
+            return GeoRssItemType.Point ;
+        }
 
     }
 }

@@ -46,9 +46,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Coordinates.cs" />
+    <Compile Include="GeoRssChannel.cs" />
+    <Compile Include="GeoRssFeed.cs" />
     <Compile Include="GeoRssItem.cs" />
+    <Compile Include="GeoRssItemType.cs" />
     <Compile Include="IGeoRssItem.cs" />
-    <Compile Include="Point.cs" />
+    <Compile Include="GeoRssPoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
