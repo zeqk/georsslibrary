@@ -8,13 +8,13 @@ namespace GeoRSSLibrary
 {
     public interface IGeoRssItem
     {
-        string Id;
-        DateTime PubDate;
-        string Title;
-        string SubTitle;
-        string Description;
-        string Author;
-        string Link;
+        string Id {get; set;}
+        DateTime PubDate { get; set; }
+        string Title { get; set; }
+        string SubTitle { get; set; }
+        string Description { get; set; }
+        string Author { get; set; }
+        string Link { get; set; }
         
     }
 }

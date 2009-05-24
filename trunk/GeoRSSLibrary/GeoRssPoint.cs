@@ -6,7 +6,7 @@ using System.Xml;
 
 namespace GeoRSSLibrary
 {
-    class Point : GeoRssItem
+    public class GeoRssPoint : GeoRssItem
     {
         private Coordinates _coordinates;
 
@@ -16,7 +16,7 @@ namespace GeoRSSLibrary
         /// <summary>
         /// Default constructor
         /// </summary>
-        public Point()
+        public GeoRssPoint()
         {
             
         }
@@ -31,10 +31,11 @@ namespace GeoRSSLibrary
         /// <param name="description"></param>
         /// <param name="author"></param>
         /// <param name="link"></param>
+        ///  <param name="type"></param>
         /// <param name="coordinates"></param>
-        public Point(string id, DateTime pubDate, string title, string subTitle,
-            string description, string author, string link, Coordinates coordinates)
-            : base(id, pubDate, title, subTitle, description, author, link)
+        public GeoRssPoint(string id, DateTime pubDate, string title, string subTitle,
+            string description, string author, string link, GeoRssItemType type, Coordinates coordinates)
+            : base(id, pubDate, title, subTitle, description, author, link,type)
         {
             this._coordinates = coordinates;
         }
@@ -43,7 +44,7 @@ namespace GeoRSSLibrary
         /// Intialize from a xml node from a GeoRSS file
         /// </summary>
         /// <param name="itemNode">XmlNode item</param>
-        public Point(XmlNode itemNode):base(itemNode)
+        public GeoRssPoint(XmlNode itemNode):base(itemNode)
         {
             XmlNode selected;
             XmlNamespaceManager xmlNSManager = new XmlNamespaceManager(new System.Xml.NameTable());
@@ -52,7 +53,10 @@ namespace GeoRSSLibrary
             if (selected != null)
             {
                 string strCoords = selected.InnerText;
+                strCoords = strCoords.TrimStart('\n', ' ');
+                strCoords = strCoords.TrimEnd('\n', ' ');
                 this._coordinates = new Coordinates(strCoords);
+                this._type = GeoRssItemType.Point;
             }
 
         }
