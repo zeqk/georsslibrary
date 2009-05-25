@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace GeoRSSLibrary
     public class GeoRssItem : IGeoRssItem
     {
         #region Fields
-        protected string _id;
+        protected string _guid;
 
         protected DateTime _pubDate;
 
@@ -25,6 +26,8 @@ namespace GeoRSSLibrary
 
         protected GeoRssItemType _type;
 
+        protected List<Coordinates> _coordinates;
+
         #endregion
 
         #region Constructors
@@ -34,10 +37,10 @@ namespace GeoRSSLibrary
         /// </summary>
         public GeoRssItem() { }
 
-        public GeoRssItem(string id, DateTime pubDate, string title, string subTitle, 
-            string description, string author, string link,GeoRssItemType type)
+        public GeoRssItem(string guid, DateTime pubDate, string title, string subTitle,
+            string description, string author, string link, GeoRssItemType type, List<Coordinates> coordinates)
         {
-            this._id = id;
+            this._guid = guid;
             this._pubDate = pubDate;
             this._title = title;
             this._subTitle = subTitle;
@@ -45,6 +48,7 @@ namespace GeoRSSLibrary
             this._author = author;
             this._link = link;
             this._type = type;
+            this._coordinates = coordinates;
         }
 
         public GeoRssItem(XmlNode itemNode)
@@ -53,7 +57,7 @@ namespace GeoRSSLibrary
 
             selected = itemNode.SelectSingleNode("guid");
             if (selected != null)
-                this._id = selected.InnerText;
+                this._guid = selected.InnerText;
 
             selected = itemNode.SelectSingleNode("pubDate");
             if (selected != null)
@@ -81,21 +85,52 @@ namespace GeoRSSLibrary
             selected = itemNode.SelectSingleNode("link");
             if (selected != null)
                 this._link = selected.InnerText;
+
+            this._coordinates = new List<Coordinates>();
+            XmlNamespaceManager xmlNSManager = new XmlNamespaceManager(new System.Xml.NameTable());
+            xmlNSManager.AddNamespace("georss", "http://www.georss.org/georss");
+            xmlNSManager.AddNamespace("gml", "http://www.opengis.net/gml");
+
+            selected = itemNode.SelectSingleNode("georss:point", xmlNSManager);
+            this._type = GeoRssItemType.Point;
+
+            if (selected == null)
+            {
+                selected = itemNode.SelectSingleNode("gml:LineString/gml:posList", xmlNSManager);
+                this._type = GeoRssItemType.Line;
+            }
+
+            if (selected == null)
+            {
+                selected = itemNode.SelectSingleNode("gml:Polygon/gml:exterior/gml:LinearRing/gml:posList", xmlNSManager);
+                this._type = GeoRssItemType.Polygon;
+            }
+
+            string strCoords = selected.InnerText;
+            strCoords = strCoords.TrimStart('\n', ' ');
+            strCoords = strCoords.TrimEnd('\n', ' ');
+            string[] arrayStrCoords = strCoords.Split('\n');
+            for (int i = 0; i < arrayStrCoords.Count<string>(); i++)
+            {
+                this._coordinates.Add(new Coordinates(arrayStrCoords[i]));
+            }
+
+
         }
 
 
         #endregion
 
         #region Properties
-        public string Id
+        public string Guid
         {
             get
             {
-                return this._id;
+                return this._guid;
             }
             set
             {
-                this._id = value;
+                this._guid = value;
             }
         }
 
@@ -181,6 +216,26 @@ namespace GeoRSSLibrary
             set
             {
                 this._type = value;
+            }
+        }
+
+        public List<Coordinates> Coordinates
+        {
+            get
+            {
+                return this._coordinates;
+            }
+            set
+            {
+                this._coordinates = value;
+            }
+        }
+
+        public Coordinates FirstCoordinates
+        {
+            get
+            {
+                return this._coordinates.First();
             }
         }
 
