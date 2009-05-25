@@ -112,7 +112,9 @@ namespace GeoRSSLibrary
         #region Methods
         public override string ToString()
         {
-            return this._latitude.ToString() + " " + this._longitude.ToString();
+            CultureInfo culture = new CultureInfo("en-US");
+            return this._latitude.ToString(culture) + " " + this._longitude.ToString(culture);
+
         }
 
         public string[] ToStringArray()
