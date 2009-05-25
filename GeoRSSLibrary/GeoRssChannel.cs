@@ -12,13 +12,13 @@ namespace GeoRSSLibrary
 
         private string _title;
         private string _link;
-        private List<IGeoRssItem> _items;
+        private List<GeoRssItem> _items;
 
 
         #region Constructors
         public GeoRssChannel(XmlNode channelNode)
         {
-            this._items = new List<IGeoRssItem>();
+            this._items = new List<GeoRssItem>();
             this._title = channelNode.SelectSingleNode("title").InnerText;
             this._link = channelNode.SelectSingleNode("link").InnerText;
 
@@ -26,19 +26,7 @@ namespace GeoRSSLibrary
 
             foreach (XmlNode item in itemNodes)
             {
-                switch (GeoRssItem.GetItemType(item))
-	            {
-                    case GeoRssItemType.Point: this._items.Add(new GeoRssPoint(item));
-                        break;
-                    case GeoRssItemType.Line: this._items.Add(new GeoRssItem(item));
-                        break;
-                    case GeoRssItemType.Polygon: this._items.Add(new GeoRssItem(item));
-                        break;
-		            default:
-                        break;
-	            }
-                
-                
+                     this._items.Add(new GeoRssItem(item));                
             }
         }
 
@@ -70,7 +58,7 @@ namespace GeoRSSLibrary
             }
         }
 
-        public List<IGeoRssItem> Items
+        public List<GeoRssItem> Items
         {
             get
             {

@@ -51,7 +51,7 @@
     <Compile Include="GeoRssItem.cs" />
     <Compile Include="GeoRssItemType.cs" />
     <Compile Include="IGeoRssItem.cs" />
-    <Compile Include="GeoRssPoint.cs" />
+    <None Include="GeoRssPoint.cs.bak" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -51,9 +51,9 @@ namespace GeoRSSLibrary
         /// <param name="culture">string of culture</param>
         public Coordinates(string[] strCoords, string culture)
         {
-            Coordinates cordinates = Parse(strCoords, culture);
-            this._latitude = cordinates.Latitude;
-            this._longitude = cordinates.Longitude;
+            Coordinates coordinates = Parse(strCoords, culture);
+            this._latitude = coordinates.Latitude;
+            this._longitude = coordinates.Longitude;
         }
 
         /// <summary>
@@ -70,8 +70,11 @@ namespace GeoRSSLibrary
         /// <param name="stringCoords">sting of concatenated coordinates</param>
         /// <param name="culture">string of culture</param>
         public Coordinates(string strCoords, string culture)
-            : this(strCoords.Split(' '))
-        { }
+        {
+            Coordinates coordinates = Parse(strCoords, culture);
+            this._latitude = coordinates.Latitude;
+            this._longitude = coordinates.Longitude;
+        }
 
         /// <summary>
         /// Initialize the latitude and the longitude from a string. The default culture is en-US
@@ -193,6 +196,8 @@ namespace GeoRSSLibrary
         /// <returns></returns>
         static public Coordinates Parse(string strCoords, string culture)
         {
+            strCoords = strCoords.TrimStart(' ');
+            strCoords = strCoords.TrimEnd(' ');
             string[] strArrayCoords = strCoords.Split(' ');
             return Parse(strArrayCoords, culture);
         }
