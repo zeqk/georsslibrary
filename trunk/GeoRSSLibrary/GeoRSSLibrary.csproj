@@ -48,10 +48,13 @@
     <Compile Include="Coordinates.cs" />
     <Compile Include="GeoRssChannel.cs" />
     <Compile Include="GeoRssFeed.cs" />
-    <Compile Include="GeoRssItem.cs" />
+    <Compile Include="GeoRssItems\Box.cs" />
+    <Compile Include="GeoRssItems\GeoRssItem.cs" />
+    <Compile Include="GeoRssItems\Line.cs" />
+    <Compile Include="GeoRssItems\Point.cs" />
+    <Compile Include="GeoRssItems\Polygon.cs" />
     <Compile Include="GeoRssItemType.cs" />
-    <Compile Include="IGeoRssItem.cs" />
-    <None Include="GeoRssPoint.cs.bak" />
+    <Compile Include="GeoRssItems\IGeoRssItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
