@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
-
+using GeoRSSLibrary.GeoRssItems;
 
 namespace GeoRSSLibrary
 {
@@ -12,13 +12,13 @@ namespace GeoRSSLibrary
 
         private string _title;
         private string _link;
-        private List<GeoRssItem> _items;
+        private List<IGeoRssItem> _items;
 
 
         #region Constructors
         public GeoRssChannel(XmlNode channelNode)
         {
-            this._items = new List<GeoRssItem>();
+            this._items = new List<IGeoRssItem>();
             this._title = channelNode.SelectSingleNode("title").InnerText;
             this._link = channelNode.SelectSingleNode("link").InnerText;
 
@@ -26,7 +26,7 @@ namespace GeoRSSLibrary
 
             foreach (XmlNode item in itemNodes)
             {
-                     this._items.Add(new GeoRssItem(item));                
+                     this._items.Add(GeoRssItem.GetGeoRssItem(item));                
             }
         }
 
@@ -58,7 +58,7 @@ namespace GeoRSSLibrary
             }
         }
 
-        public List<GeoRssItem> Items
+        public List<IGeoRssItem> Items
         {
             get
             {
